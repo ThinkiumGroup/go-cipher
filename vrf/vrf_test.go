@@ -53,6 +53,7 @@ const (
 // }
 
 func TestVRF(t *testing.T) {
+	oneTypeVrf(t, cipher.NewCipher(cipher.GMSM))
 	oneTypeVrf(t, cipher.NewCipher(cipher.SECP256K1SHA3))
 }
 

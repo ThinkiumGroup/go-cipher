@@ -19,6 +19,7 @@ type (
 const (
 	HashLength    = 32
 	SECP256K1SHA3 = "secp256k1_sha3"
+	GMSM          = "sm2_sm3"
 )
 
 var (
@@ -30,6 +31,8 @@ func NewCipher(name string) Cipher {
 	switch name {
 	case SECP256K1SHA3:
 		return NewSecpCipher()
+	case GMSM:
+		return NewGMCipher()
 	}
 	return nil
 }

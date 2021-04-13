@@ -5,6 +5,7 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	"errors"
 	"hash"
 	"math/big"
 
@@ -22,6 +23,10 @@ const (
 )
 
 var (
+	ErrInvalidCurve               = errors.New("invalid elliptic curve")
+	ErrSharedKeyIsPointAtInfinity = errors.New("shared key is point at infinity")
+	ErrSharedKeyTooBig            = errors.New("shared key params are too big")
+
 	secp256k1N, _  = new(big.Int).SetString("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", 16)
 	secp256k1halfN = new(big.Int).Div(secp256k1N, big.NewInt(2))
 )
@@ -64,6 +69,7 @@ type ECCPrivateKey interface {
 	ToBytes() []byte
 	FromBytes(priv []byte) (ECCPrivateKey, error)
 	VrfEval(m []byte) (index [32]byte, proof []byte)
+	GenerateShared(k ECCPublicKey, skLen, macLen int) (sk []byte, err error)
 }
 
 type ECCPublicKey interface {
@@ -102,4 +108,9 @@ func ValidateSecpSigValues(v byte, r, s *big.Int) bool {
 		return false
 	}
 	return r.Cmp(secp256k1N) < 0 && s.Cmp(secp256k1N) < 0 && (v == 0 || v == 1)
+}
+
+func MaxSharedKeyLength(p ECCPublicKey) int {
+	pub := p.ToECDSA()
+	return (pub.Curve.Params().BitSize + 7) / 8
 }

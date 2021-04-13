@@ -253,3 +253,23 @@ func (p *Secp256k1PrivateKey) FromBytes(priv []byte) (ECCPrivateKey, error) {
 func (p *Secp256k1PrivateKey) VrfEval(m []byte) (index [32]byte, proof []byte) {
 	return VrfEval(p, m)
 }
+
+func (p *Secp256k1PrivateKey) GenerateShared(k ECCPublicKey, skLen, macLen int) (sk []byte, err error) {
+	pub := k.ToECDSA()
+	if p.PublicKey.Curve != pub.Curve {
+		return nil, ErrInvalidCurve
+	}
+	if skLen+macLen > MaxSharedKeyLength(k) {
+		return nil, ErrSharedKeyTooBig
+	}
+
+	x, _ := pub.Curve.ScalarMult(pub.X, pub.Y, p.D.Bytes())
+	if x == nil {
+		return nil, ErrSharedKeyIsPointAtInfinity
+	}
+
+	sk = make([]byte, skLen+macLen)
+	skBytes := x.Bytes()
+	copy(sk[len(sk)-len(skBytes):], skBytes)
+	return sk, nil
+}

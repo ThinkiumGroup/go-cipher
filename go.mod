@@ -1,4 +1,4 @@
-module github.com/ThinkiumGroup/go-cipher/v10
+module github.com/ThinkiumGroup/go-cipher
 
 go 1.12
 

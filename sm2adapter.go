@@ -1,6 +1,7 @@
 package cipher
 
 import (
+	"crypto/rand"
 	"fmt"
 
 	"github.com/tjfoc/gmsm/sm2"
@@ -10,7 +11,7 @@ func Sm2Sign(hash []byte, prv *sm2.PrivateKey) (sig []byte, err error) {
 	if len(hash) != 32 {
 		return nil, fmt.Errorf("hash is required to be exactly 32 bytes (%d)", len(hash))
 	}
-	r, s, err := sm2.Sm2Sign(prv, hash, nil)
+	r, s, err := sm2.Sm2Sign(prv, hash, nil, rand.Reader)
 	if err != nil {
 		return nil, err
 	}

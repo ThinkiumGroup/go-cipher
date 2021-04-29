@@ -4,6 +4,7 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	crand "crypto/rand"
 	"errors"
 	"fmt"
 	"hash"
@@ -33,7 +34,7 @@ func (s GMSigner) Name() string {
 }
 
 func (s GMSigner) GenerateKey() (priv ECCPrivateKey, err error) {
-	sm2priv, err := sm2.GenerateKey()
+	sm2priv, err := sm2.GenerateKey(crand.Reader)
 	if err != nil {
 		return nil, err
 	}

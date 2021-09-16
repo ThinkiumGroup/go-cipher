@@ -19,7 +19,7 @@ import (
 const (
 	secpPubSize  = 65 // ((Params().BitSize + 7) >> 3)*2 + 1
 	secpPrivSize = 32 // (Params().BitSize + 7) >> 3
-	secpSigSize  = 65
+	SecpSigSize  = 65
 )
 
 // create a signer of the specified type
@@ -103,7 +103,7 @@ func (s Secp256k1Signer) LengthOfPrivateKey() int {
 }
 
 func (s Secp256k1Signer) LengthOfSignature() int {
-	return secpSigSize
+	return SecpSigSize
 }
 
 func (s Secp256k1Signer) LengthOfHash() int {

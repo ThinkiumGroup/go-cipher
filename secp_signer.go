@@ -50,10 +50,22 @@ func (s Secp256k1Signer) Sign(priv []byte, hash []byte) (sig []byte, err error) 
 }
 
 func (s Secp256k1Signer) Verify(pub []byte, hash []byte, sig []byte) bool {
-	if len(pub) != s.LengthOfPublicKey() || len(sig) != s.LengthOfSignature() {
+	p := pub
+	if len(pub) == 0 {
+		var err error
+		p, err = secp256k1.RecoverPubkey(hash, sig)
+		if err != nil {
+			return false
+		}
+	}
+	if len(p) != s.LengthOfPublicKey() || len(sig) != s.LengthOfSignature() {
 		return false
 	}
-	return VerifySignature(pub, hash, sig[:64])
+	return VerifySignature(p, hash, sig[:64])
+}
+
+func (s Secp256k1Signer) RecoverPub(hash, sig []byte) ([]byte, error) {
+	return secp256k1.RecoverPubkey(hash, sig)
 }
 
 func (s Secp256k1Signer) PrivToBytes(priv ECCPrivateKey) []byte {

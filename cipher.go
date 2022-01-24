@@ -44,6 +44,7 @@ type Cipher interface {
 	GenerateKey() (priv ECCPrivateKey, err error)
 	Sign(priv []byte, hash []byte) (sig []byte, err error)
 	Verify(pub []byte, hash []byte, sig []byte) bool
+	RecoverPub(hash, sig []byte) ([]byte, error)
 
 	PrivToBytes(priv ECCPrivateKey) []byte
 	PubToBytes(pub ECCPublicKey) []byte

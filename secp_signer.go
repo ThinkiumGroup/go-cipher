@@ -13,7 +13,7 @@ import (
 
 	"github.com/ThinkiumGroup/go-cipher/math"
 	"github.com/ThinkiumGroup/go-ecrypto/secp256k1"
-	"github.com/ThinkiumGroup/go-ecrypto/sha3"
+	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -103,7 +103,7 @@ func (s Secp256k1Signer) PubToNodeIdBytes(pub []byte) ([]byte, error) {
 }
 
 func (s Secp256k1Signer) Hasher() hash.Hash {
-	return sha3.NewKeccak256()
+	return sha3.NewLegacyKeccak256()
 }
 
 func (s Secp256k1Signer) LengthOfPublicKey() int {
@@ -196,7 +196,7 @@ func (p *Secp256k1PublicKey) PubkeyToAddress() []byte {
 }
 
 func (p *Secp256k1PublicKey) Hash256s(in ...[]byte) []byte {
-	hasher := sha3.NewKeccak256()
+	hasher := sha3.NewLegacyKeccak256()
 	for _, b := range in {
 		hasher.Write(b)
 	}

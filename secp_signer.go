@@ -130,6 +130,10 @@ func (s Secp256k1Signer) LengthOfHash() int {
 	return HashLength
 }
 
+func (s Secp256k1Signer) ValidateSignatureValues(V byte, R, S *big.Int, homestead bool) bool {
+	return ValidateSignatureValues(V, R, S, homestead)
+}
+
 func (s Secp256k1Signer) String() string {
 	return fmt.Sprintf("Secp256k1(sk:%d pk:%d sig:%d hash:%d)",
 		s.LengthOfPrivateKey(), s.LengthOfPublicKey(), s.LengthOfSignature(), s.LengthOfHash())

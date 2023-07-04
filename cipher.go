@@ -64,6 +64,8 @@ type Cipher interface {
 	LengthOfPrivateKey() int // number of bytes of private key
 	LengthOfSignature() int  // number of bytes of signature
 	LengthOfHash() int       // number of bytes of input Hash
+
+	ValidateSignatureValues(v byte, r, s *big.Int, homestead bool) bool
 }
 
 type ECCPrivateKey interface {

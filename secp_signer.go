@@ -102,6 +102,14 @@ func (s Secp256k1Signer) PubToNodeIdBytes(pub []byte) ([]byte, error) {
 	return id, nil
 }
 
+func (s Secp256k1Signer) PubFromPriv(priv []byte) ([]byte, error) {
+	eccpriv, err := s.BytesToPriv(priv)
+	if err != nil {
+		return nil, err
+	}
+	return eccpriv.GetPublicKey().ToBytes(), nil
+}
+
 func (s Secp256k1Signer) Hasher() hash.Hash {
 	return sha3.NewLegacyKeccak256()
 }

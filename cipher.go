@@ -56,6 +56,8 @@ type Cipher interface {
 	PubFromNodeId(id []byte) []byte
 	PubToNodeIdBytes(pub []byte) ([]byte, error)
 
+	PubFromPriv(priv []byte) ([]byte, error)
+
 	Hasher() hash.Hash
 
 	LengthOfPublicKey() int  // number of bytes of public key
